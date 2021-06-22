@@ -1,7 +1,11 @@
 class Api::ZmanimsController < ApplicationController
   def index
-    response = HTTP.get("https://www.hebcal.com/zmanim?cfg=json&zip=#{params[:zipcode]}&date=#{params[:date]}")
+    next_friday = Date.today.end_of_week(:saturday)
+    ap next_friday
+
+    response = HTTP.get("https://www.hebcal.com/zmanim?cfg=json&zip=#{params[:zipcode]}&date=#{next_friday}")
     @data = JSON.parse(response)
+
     zmanim = {}
     zmanim[:date] = @data["date"]
     zmanim[:name] = @data["location"]["name"]
