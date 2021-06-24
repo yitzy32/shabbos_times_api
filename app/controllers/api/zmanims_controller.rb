@@ -1,5 +1,5 @@
 class Api::ZmanimsController < ApplicationController
-  def index
+  def show
     next_friday = Date.today.end_of_week(:saturday)
     ap next_friday
 
@@ -7,20 +7,19 @@ class Api::ZmanimsController < ApplicationController
     @data = JSON.parse(response)
 
     zmanim = {}
-    zmanim[:date] = @data["date"]
+    zmanim[:date] = Date.parse(@data["date"]).strftime("%A %B %e")
     zmanim[:name] = @data["location"]["name"]
-    zmanim[:zip] = @data["location"]["zip"]
-    zmanim[:minchaGedola] = @data["times"]["minchaGedola"]
-    zmanim[:plagHaMincha] = @data["times"]["plagHaMincha"]
-    zmanim[:sunset] = @data["times"]["sunset"]
-    zmanim[:tzeit50min] = @data["times"]["tzeit50min"]
-    zmanim[:tzeit72min] = @data["times"]["tzeit72min"]
+    zmanim[:mincha_gedola] = DateTime.parse(@data["times"]["minchaGedola"]).strftime("%l:%M:%S %p")
+    zmanim[:plag_hamincha] = DateTime.parse(@data["times"]["plagHaMincha"]).strftime("%l:%M:%S %p")
+    zmanim[:sunset] = DateTime.parse(@data["times"]["sunset"]).strftime("%l:%M:%S %p")
+    zmanim[:tzeis_50_min] = DateTime.parse(@data["times"]["tzeit50min"]).strftime("%l:%M:%S %p")
+    zmanim[:tzeis_72_min] = DateTime.parse(@data["times"]["tzeit72min"]).strftime("%l:%M:%S %p")
     ap zmanim
 
     selected_day = Date.parse(zmanim[:date])
     plus_1_week = Date.parse(zmanim[:date]) + 7
 
     convert_to_sring = plus_1_week.strftime("%Y/%m/%d")
-    render "index.json.jb"
+    render "show.json.jb"
   end
 end
