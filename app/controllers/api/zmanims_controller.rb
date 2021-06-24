@@ -12,6 +12,8 @@ class Api::ZmanimsController < ApplicationController
       @zmanim[:date] = Date.parse(@data["date"]).strftime("%A %B %e")
       @zmanim[:name] = @data["location"]["name"]
       @zmanim[:mincha_gedola] = DateTime.parse(@data["times"]["minchaGedola"]).strftime("%l:%M %p")
+      @zmanim[:mincha] = DateTime.parse(@data["times"]["plagHaMincha"]) - 15.minutes
+      @zmanim[:mincha] = @zmanim[:mincha].strftime("%l:%M %p")
       @zmanim[:plag_hamincha] = DateTime.parse(@data["times"]["plagHaMincha"]).strftime("%l:%M %p")
       @zmanim[:sunset] = DateTime.parse(@data["times"]["sunset"]).strftime("%l:%M %p")
       @zmanim[:tzeis_50_min] = DateTime.parse(@data["times"]["tzeit50min"]).strftime("%l:%M %p")
@@ -34,6 +36,8 @@ class Api::ZmanimsController < ApplicationController
     @zmanim[:date] = Date.parse(@data["date"]).strftime("%A %B %e")
     @zmanim[:name] = @data["location"]["name"]
     @zmanim[:mincha_gedola] = DateTime.parse(@data["times"]["minchaGedola"]).strftime("%l:%M %p")
+    @zmanim[:mincha] = DateTime.parse(@data["times"]["plagHaMincha"]) - 15.minutes
+    @zmanim[:mincha] = @zmanim[:mincha].strftime("%l:%M %p")
     @zmanim[:plag_hamincha] = DateTime.parse(@data["times"]["plagHaMincha"]).strftime("%l:%M %p")
     @zmanim[:sunset] = DateTime.parse(@data["times"]["sunset"]).strftime("%l:%M %p")
     @zmanim[:tzeis_50_min] = DateTime.parse(@data["times"]["tzeit50min"]).strftime("%l:%M %p")
