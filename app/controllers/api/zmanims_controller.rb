@@ -15,9 +15,11 @@ class Api::ZmanimsController < ApplicationController
       @zmanim[:mincha] = DateTime.parse(@data["times"]["plagHaMincha"]) - 15.minutes
       @zmanim[:mincha] = @zmanim[:mincha].strftime("%l:%M %p")
       @zmanim[:plag_hamincha] = DateTime.parse(@data["times"]["plagHaMincha"]).strftime("%l:%M %p")
+      @zmanim[:candle_lighting] = DateTime.parse(@data["times"]["sunset"]) - 18.minutes
+      @zmanim[:candle_lighting] = @zmanim[:candle_lighting].strftime("%l:%M %p")
       @zmanim[:sunset] = DateTime.parse(@data["times"]["sunset"]).strftime("%l:%M %p")
-      @zmanim[:tzeis_50_min] = DateTime.parse(@data["times"]["tzeit50min"]).strftime("%l:%M %p")
-      @zmanim[:tzeis_72_min] = DateTime.parse(@data["times"]["tzeit72min"]).strftime("%l:%M %p")
+      @zmanim[:tzeis50min_fri_night] = DateTime.parse(@data["times"]["tzeit50min"]).strftime("%l:%M %p")
+      @zmanim[:tzeis72min_fri_night] = DateTime.parse(@data["times"]["tzeit72min"]).strftime("%l:%M %p")
 
       next_friday += 7
       @calendar_of_fridays << @zmanim
@@ -29,7 +31,7 @@ class Api::ZmanimsController < ApplicationController
   def show
     next_friday = Date.today.end_of_week(:saturday)
 
-    response = HTTP.get("https://www.hebcal.com/zmanim?cfg=json&zip=#{params[:zipcode]}&date=#{next_friday}")
+    response = HTTP.get("https://www.hebcal.com/zmanim?cfg=json&zip=#{params[:search]}&date=#{next_friday}")
     @data = JSON.parse(response)
 
     @zmanim = {}
@@ -39,9 +41,11 @@ class Api::ZmanimsController < ApplicationController
     @zmanim[:mincha] = DateTime.parse(@data["times"]["plagHaMincha"]) - 15.minutes
     @zmanim[:mincha] = @zmanim[:mincha].strftime("%l:%M %p")
     @zmanim[:plag_hamincha] = DateTime.parse(@data["times"]["plagHaMincha"]).strftime("%l:%M %p")
+    @zmanim[:candle_lighting] = DateTime.parse(@data["times"]["sunset"]) - 18.minutes
+    @zmanim[:candle_lighting] = @zmanim[:candle_lighting].strftime("%l:%M %p")
     @zmanim[:sunset] = DateTime.parse(@data["times"]["sunset"]).strftime("%l:%M %p")
-    @zmanim[:tzeis_50_min] = DateTime.parse(@data["times"]["tzeit50min"]).strftime("%l:%M %p")
-    @zmanim[:tzeis_72_min] = DateTime.parse(@data["times"]["tzeit72min"]).strftime("%l:%M %p")
+    @zmanim[:tzeis50min_fri_night] = DateTime.parse(@data["times"]["tzeit50min"]).strftime("%l:%M %p")
+    @zmanim[:tzeis72min_fri_night] = DateTime.parse(@data["times"]["tzeit72min"]).strftime("%l:%M %p")
     ap @zmanim
 
     render "show.json.jb"
