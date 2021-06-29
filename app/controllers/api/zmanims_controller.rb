@@ -5,7 +5,7 @@ class Api::ZmanimsController < ApplicationController
 
     next_friday = starting_date.end_of_week(:saturday)
     35.times do
-      response = HTTP.get("https://www.hebcal.com/zmanim?cfg=json&zip=#{params[:zipcode]}&date=#{next_friday}")
+      response = HTTP.get("https://www.hebcal.com/zmanim?cfg=json&zip=#{params[:search]}&date=#{next_friday}")
       @data = JSON.parse(response)
 
       @zmanim = {}
