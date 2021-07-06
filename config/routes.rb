@@ -8,3 +8,4 @@ Rails.application.routes.draw do
     get "/zmanims" => "zmanims#show"
   end
 end
+# hello test
